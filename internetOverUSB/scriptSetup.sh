@@ -7,34 +7,19 @@
 
 echo "Setting up internetOverUSB"
 
-cp /bin/internetOverUSB /root/bin
-if [ $? -eq 0 ]; then
-	echo "Error in copying, are you root?"
-	break
-fi
+## Copies the internetOverUSB script to the actual bin directory
+cp ./bin/internetOverUSB /bin
 
-chmod 755 /root/bin/internetOverUSB
-if [ $? -eq 0 ]; then
-	echo "Error in changing file permissions"
-	break
-fi
+## Changes the file permission to allow execution
+chmod 755 /bin/internetOverUSB
 
-cp /init/internetOverUSB /etc/init.d
-if [ $? -eq 0 ]; then
-        echo "Error in copying, are you root?"
-        break
-fi
+## Copies the initialization scripts to the init.d folder
+cp ./init/internetOverUSB /etc/init.d
 
+## Changes file permissions to allow execution
 chmod 755 /etc/init.d/internetOverUSB
-if [ $? -eq 0 ]; then
-        echo "Error in changing file permissions"
-        break
-fi
 
+## Updates the initializtion routine list to include internetOverUSB
 update-rc.d internetOverUSB defaults
-if [ $? -eq 0 ]; then
-        echo "Error in updating startup routine with script"
-        break
-fi
 
 echo "End of setup script"
