@@ -1,0 +1,29 @@
+#!bin/sh
+
+### BEGIN INIT INFO
+# Provides: InternetOverUSB
+# Required-Start: $all
+# Required-Stop: $all
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Sets up internet over USB
+# Description: Calls /root/bin/internetOverUSB to set
+#	the default gateway to the host on 192.168.7.1
+#	and sets the nameserver 8.8.8.8, along with
+#	updating the time over ntp.
+### END INIT INFO
+
+case "$1" in
+	start)
+		sleep 20
+		/root/bin/internetOverUSB
+	;;
+	stop)
+		#no-op
+	;;
+	*)
+		#no-op
+	;;
+esac
+
+exit 0
