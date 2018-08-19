@@ -88,3 +88,16 @@ else
 	echo "Couldn't set sound on master. Return code $retval"
 	exit 1
 fi
+
+# Add all the relevant lines to the i3 config file:
+echo "Adding keyboard volume controls to the i3 config file..."
+echo "bindcode 121 exec amixer sset 'Master' toggle
+bindcode 122 exec amixer sset 'Master' 5%-
+bindcode 123 exec amixer sset 'Master' 5%+" >> ~/.config/i3/config
+retval=$?
+if [ $retval -eq 0 ]; then
+	echo "Added keyboard volume controls!"
+else
+	echo "Couldn't add keyboard controls. Return code $retval"
+	exit 1
+fi
