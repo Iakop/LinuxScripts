@@ -15,22 +15,21 @@ useradd -m -U -G wheel,ftp,games,http,log,rfkill,sys,systemd-journal,users,uucp 
 # TODO: Add a grep that finds the %wheel line in sudoers and allows ALL for it
 
 # Install needed packages
-pacman -S nvidia xorg-server xorg-xinit xorg-apps i3-gaps i3status rxvt-unicode dmenu neofetch ranger python-pywal vlc w3m firefox git
+pacman -S nvidia xorg-server xorg-xinit xorg-apps i3-gaps i3status i3blocks rxvt-unicode dmenu neofetch ranger python-pywal vlc w3m firefox git
 
 # Sets Xorg up for the multi-monitor display:
 echo "Setting up Xorg Monitor configuration in /etc/X11/xorg.conf.d/10-monitor.conf..."
 echo -e "Section \"Monitor\"
 \tIdentifier \"HDMI-0\"
-\tOption \"Primary\" \"True\"
 \tOption \"PreferredMode\" \"1680x1050\"
-\tOption \"Position\" \"0 0\"
+\tOption \"Position\" \"0 262\"
 EndSection
 
 Section \"Monitor\"
 \tIdentifier \"HDMI-1\"
 \tOption \"PreferredMode\" \"1680x1050\"
 \tOption \"Rotate\" \"Left\"
-\tOption \"Position\" \"1680 -350\"
+\tOption \"Position\" \"1680 0\"
 EndSection" >> /etc/X11/xorg.conf.d/10-monitor.conf
 retval=$?
 if [ $retval -eq 0 ]; then
@@ -40,8 +39,14 @@ else
 	exit 1
 fi
 
-#  TODO: Set up Xorg keyboard language to danish:
+# Sets Xorg keyboard language to danish:
 echo "Setting up Xorg Keyboard configuration in /etc/X11/xorg.conf.d/00-keyboard.conf..."
+
+echo -e "Section \"InputClass\"
+\tIdentifier \"system-keyboard\"
+\tMatchIsKeyboard \"on\"
+\tOption \"XkbLayout\" \"dk\"
+EndSection" >> /etc/X11/xorg.conf.d/00-keyboard.conf
 
 retval=$?
 if [ $retval -eq 0 ]; then
@@ -50,7 +55,6 @@ else
 	echo "Couldn't set up keyboard. Return code $retval"
 	exit 1
 fi
-
 
 # Sets the alsa settings to enable sound on the correct devices:
 echo "Setting up ALSA device configuration in /etc/modprobe.d/alsa-base.conf..."
@@ -74,3 +78,13 @@ else
 	exit 1
 fi
 
+# Unmute and set the Master control with amixer:
+echo "Setting the amixer Master control to unmute and 50% output..."
+amixer set Master unmute 32
+retval=$?
+if [ $retval -eq 0 ]; then
+	echo "Set amixer volume!"
+else
+	echo "Couldn't set sound on master. Return code $retval"
+	exit 1
+fi
