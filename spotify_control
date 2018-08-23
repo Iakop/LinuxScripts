@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Simple Spotify Control
+# Just call ./spotify_control --help
+# Credit to schuellerf from the Spotify Community for writing this glorious piece of convenient Spotify glue script!
+
+CMD="dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player"
+
+case "$1" in
+  "playpause" )
+    ${CMD}.PlayPause
+    exit $?
+  ;;
+  "next" )
+    ${CMD}.Next
+    exit $?
+  ;;
+  "previous" )
+    ${CMD}.Previous
+    exit $?
+  ;;
+  "stop" )
+    ${CMD}.Stop
+    exit $?
+  ;;
+  "play" )
+    ${CMD}.Play
+    exit $?
+  ;;
+  *)
+    echo "Usage: $0 [command]"
+    echo "  commands are: playpause, next, previous, stop, play"
+    exit 1
+  ;;
+esac
+
